@@ -33,30 +33,29 @@ foreach ($this->opciones as $key => $opcion) {
     }
 
 
-    function elegir()
-    {
-        $this->mostrar();
-        do {
-            $opcion = trim(fgets(STDIN));
-if (trim($opcion) == "") {
-                echo "\033[1A"; // Mueve el cursor una línea arriba para re-pedir la entrada
-            }
-        } while (trim($opcion) == "");
+function elegir()
+{
+    $this->mostrar();
+    do {
+        $opcion = trim(fgets(STDIN));
+        if (trim($opcion) == "") {
+            echo "\033[1A"; // Mueve el cursor una línea arriba para re-pedir la entrada
+        }
+    } while (trim($opcion) == "");
 
 
-        // Valida si la opción ingresada es numérica y existe en el array de opciones
-if (is_numeric($opcion) && isset($this->opciones[$opcion])) {
-            $operacion = $this->opciones[$opcion];
-            return $operacion;
-        } else {
-mostrar("\nOpción inválida. Por favor, ingrese un número de opción válido.");
-            leer("Presione ENTER para reintentar...");
-            return $this->elegir(); // Vuelve a mostrar el menú y pedir la opción
-}
+    // Valida si la opción ingresada es numérica y existe en el array de opciones
+    if (is_numeric($opcion) && isset($this->opciones[$opcion - 1])) {
+        $operacion = $this->opciones[$opcion - 1];
+        return $operacion;
+    } else {
+        mostrar("\nOpción inválida. Por favor, ingrese un número de opción válido.");
+        leer("Presione ENTER para reintentar...");
+        return $this->elegir(); // Vuelve a mostrar el menú y pedir la opción
     }
+}
 
-
-    static function getMenuPrincipal()
+static function getMenuPrincipal()
 {
     $menu = new Menu('Menu Principal');
     $menu->addOpcion(new Opcion('Salir', 'salir'));
