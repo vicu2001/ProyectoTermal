@@ -1,7 +1,7 @@
 <?php
 require_once('Opcion.php');
 require_once('Util.php');
-
+require_once 'Librerias/EntradaAdquirida.php';
 
 class Menu
 {
@@ -57,14 +57,15 @@ mostrar("\nOpción inválida. Por favor, ingrese un número de opción válido."
 
 
     static function getMenuPrincipal()
-    {
-        $menu = new Menu('Menu Principal');
-        $menu->addOpcion(new Opcion('Salir', 'salir'));
-        $menu->addOpcion(new Opcion('Gestionar Parques Termales', 'gestionarParquesTermales'));
-        $menu->addOpcion(new Opcion('Gestionar Usuarios', 'gestionarUsuarios'));
-$menu->addOpcion(new Opcion('Gestionar Tipos de Entradas', 'gestionarTiposEntradas'));
-return $menu;
-    }
+{
+    $menu = new Menu('Menu Principal');
+    $menu->addOpcion(new Opcion('Salir', 'salir'));
+    $menu->addOpcion(new Opcion('Gestionar Parques Termales', 'gestionarParquesTermales'));
+    $menu->addOpcion(new Opcion('Gestionar Usuarios', 'gestionarUsuarios'));
+    $menu->addOpcion(new Opcion('Gestionar Tipos de Entradas', 'gestionarTiposEntradas'));
+    $menu->addOpcion(new Opcion('Reservar Entrada', 'reservarEntrada')); // <-- NUEVO
+    return $menu;
+}
 
 
     static function getMenuParquesTermales()

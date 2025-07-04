@@ -7,7 +7,8 @@ require_once('./db/LoadDatos.php');
 
 
 global $db; // Acceder a la instancia global de la base de datos
-
+global $reservas; // <-- NUEVO
+$reservas = [];   // <-- NUEVO
 
 // --- Funciones para Parque Termal ---
 
@@ -298,7 +299,56 @@ function gestionarTiposEntradas()
         $opcion = $menu->elegir();
     }
 }
+function reservarEntrada()
+{
+    global $db, $reservas;
 
+    mostrar("--- Reservar Entrada ---");
+
+    // 1. Seleccionar usuario
+    $usuarios = $db->getUsuarios();
+    if (empty($usuarios)) {
+        mostrar("No hay usuarios registrados.");
+        leer("Presione ENTER para continuar ...");
+        return;
+    }
+    mostrar("Seleccione el usuario:");
+    foreach ($usuarios as $i => $usuario) {
+        mostrar(($i + 1) . " - " . $usuario->getNombre() . " " . $usuario->getApellido() . " (DNI: " . $usuario->getDni() . ")");
+    }
+    $opUsuario = (int)leer("Ingrese el número de usuario: ") - 1;
+    if (!isset($usuarios[$opUsuario])) {
+        mostrar("Opción inválida.");
+        return;
+    }
+    $usuarioSeleccionado = $usuarios[$opUsuario];
+
+    // 2. Seleccionar tipo de entrada
+    $tipos = $db->getTiposEntradas();
+    if (empty($tipos)) {
+        mostrar("No hay tipos de entradas registrados.");
+        leer("Presione ENTER para continuar ...");
+        return;
+    }
+    mostrar("Seleccione el tipo de entrada:");
+    foreach ($tipos as $i => $tipo) {
+        mostrar(($i + 1) . " - " . $tipo->getNombre());
+    }
+    $opTipo = (int)leer("Ingrese el número de tipo de entrada: ") - 1;
+    if (!isset($tipos[$opTipo])) {
+        mostrar("Opción inválida.");
+        return;
+    }
+    $tipoSeleccionado = $tipos[$opTipo];
+
+    // 3. Crear la reserva
+    $reserva = new EntradaAdquirida($usuarioSeleccionado, $tipoSeleccionado);
+    $reservas[] = $reserva;
+
+    mostrar("¡Reserva realizada con éxito!");
+    mostrar($reserva);
+    leer("Presione ENTER para continuar ...");
+}
 
 // --- Menú Principal ---
 
